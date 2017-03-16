@@ -22,6 +22,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             configuration.server = "http://45.79.67.127:1337/parse"
         }))
         
+        // Check if there's a current user
+        print("Current user: " + PFUser.current().debugDescription)
+        if PFUser.current() != nil {
+            print("There is a current user")
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = storyboard.instantiateViewController(withIdentifier: "ChatNavigationController")
+            window?.rootViewController = vc
+        }
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "userDidLogout"), object: nil, queue: OperationQueue.main, using: {(Notification) -> Void in
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = storyboard.instantiateInitialViewController()
+            self.window?.rootViewController = vc
+        })
+        
         return true
     }
 
